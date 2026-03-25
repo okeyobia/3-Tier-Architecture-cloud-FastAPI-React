@@ -21,4 +21,10 @@ resource "aws_cloudfront_distribution" "cdn" {
     acm_certificate_arn = var.acm_certificate_arn
     ssl_support_method  = "sni-only"
   }
+
+  restrictions {
+    geo_restriction {
+      restriction_type = "none"
+    }
+  }
 }

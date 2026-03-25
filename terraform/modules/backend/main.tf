@@ -8,7 +8,9 @@ resource "aws_lb_target_group" "tg" {
   vpc_id = var.vpc_id
 }
 
-resource "aws_ecs_cluster" "main" {}
+resource "aws_ecs_cluster" "main" {
+  name = "${var.app_name}-cluster"
+}
 
 resource "aws_ecs_task_definition" "task" {
   family = "${var.app_name}-task"
@@ -21,7 +23,8 @@ resource "aws_ecs_task_definition" "task" {
 }
 
 resource "aws_ecs_service" "svc" {
-  cluster = aws_ecs_cluster.main.id
+  name            = "${var.app_name}-service"
+  cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.task.arn
-  desired_count = 2
+  desired_count   = 2
 }
