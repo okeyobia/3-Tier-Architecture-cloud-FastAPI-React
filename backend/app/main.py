@@ -5,12 +5,25 @@ from pydantic import BaseModel
 from sqlalchemy import select, insert
 from app.database import engine
 from app.models import metadata, users
+from fastapi.middleware.cors import CORSMiddleware
+
+
 class UserCreate(BaseModel):
     name: str
     email: str
 
 
 app = FastAPI(title="FastAPI Backend")
+
+
+# CORS configuration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.post("/api/users")
 def create_user(user: UserCreate):
