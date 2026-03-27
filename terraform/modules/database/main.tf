@@ -18,6 +18,7 @@ resource "aws_db_subnet_group" "rds" {
 resource "aws_db_instance" "db" {
   engine         = "postgres"
   instance_class = "db.t3.micro"
+  allocated_storage = 20
   username       = local.db_creds.username
   password       = local.db_creds.password
   multi_az       = true

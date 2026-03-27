@@ -1,5 +1,9 @@
+resource "random_id" "frontend_bucket" {
+  byte_length = 4
+}
+
 resource "aws_s3_bucket" "frontend" {
-  bucket = "${var.app_name}-frontend"
+  bucket = "${var.app_name}-frontend-${random_id.frontend_bucket.hex}"
 }
 
 resource "aws_cloudfront_distribution" "cdn" {
