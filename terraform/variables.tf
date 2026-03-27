@@ -9,5 +9,3 @@ variable "backend_image" {}
 variable "frontend_image" {}
 
 variable "db_name" {}
-
-variable "acm_certificate_arn" {}

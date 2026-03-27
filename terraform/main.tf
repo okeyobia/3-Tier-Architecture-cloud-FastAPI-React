@@ -25,5 +25,4 @@ module "backend" {
 module "frontend" {
   source              = "./modules/frontend"
   app_name            = var.app_name
-  acm_certificate_arn = var.acm_certificate_arn
 }

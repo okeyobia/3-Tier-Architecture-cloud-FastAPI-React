@@ -76,11 +76,28 @@ jobs:
       working-directory: ./terraform
       run: terraform init -input=false
 
+
     - name: Terraform Plan
       working-directory: ./terraform
-      run: terraform plan -out=tfplan -input=false
+      env:
+        BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
+        FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        # ACM_CERTIFICATE_ARN removed
+      run: |
+        terraform plan -out=tfplan -input=false \
+          -var="backend_image=$BACKEND_IMAGE" \
+          -var="frontend_image=$FRONTEND_IMAGE" \
+          -var="db_name=$DB_NAME" \
+          # -var="acm_certificate_arn=$ACM_CERTIFICATE_ARN" (removed)
 
     # 9️⃣ Terraform Apply
     - name: Terraform Apply
       working-directory: ./terraform
-      run: terraform apply -auto-approve tfplan
+      env:
+        BACKEND_IMAGE: ${{ env.BACKEND_IMAGE }}
+        FRONTEND_IMAGE: ${{ env.FRONTEND_IMAGE }}
+        DB_NAME: ${{ secrets.DB_NAME }}
+        # ACM_CERTIFICATE_ARN removed
+      run: |
+        terraform apply -auto-approve tfplan
