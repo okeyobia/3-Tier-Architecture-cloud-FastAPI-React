@@ -13,7 +13,9 @@ resource "aws_ecs_cluster" "main" {
 }
 
 resource "aws_ecs_task_definition" "task" {
-  family = "${var.app_name}-task"
+  family                   = "${var.app_name}-task"
+  execution_role_arn        = aws_iam_role.ecs_task_execution.arn
+  task_role_arn             = aws_iam_role.ecs_task_execution.arn
 
   container_definitions = jsonencode([{
     name  = "fastapi"
@@ -25,7 +27,6 @@ resource "aws_ecs_task_definition" "task" {
         name      = "DB_SECRET_ARN"
         valueFrom = var.db_secret_arn
       }
-
     ]
   }])
 }
