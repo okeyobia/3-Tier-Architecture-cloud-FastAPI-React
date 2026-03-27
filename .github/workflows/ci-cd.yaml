@@ -57,23 +57,18 @@ jobs:
         docker build -f frontend/Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG frontend/
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
     
-    - name: Push DB secret to AWS Secrets Manager
+    # 7️⃣ Create or update DB secret in AWS Secrets Manager
+    - name: Create or update DB secret in AWS Secrets Manager
+      env:
+        AWS_REGION: us-east-1
+        SECRET_NAME: fastapi-react-app/db
+        SECRET_VALUE: '{"username":"${{ secrets.DB_USER }}","password":"${{ secrets.DB_PASSWORD }}"}'
       run: |
-        aws secretsmanager create-secret \
-        --name "${{ env.APP_NAME }}/db" \
-        --secret-string '{
-            "username":"${{ secrets.DB_USER }}",
-            "password":"${{ secrets.DB_PASSWORD }}"
-        }' \
-        --region us-east-1 || \
-        aws secretsmanager update-secret \
-        --secret-id "${{ env.APP_NAME }}/db" \
-        --secret-string '{
-            "username":"${{ secrets.DB_USER }}",
-            "password":"${{ secrets.DB_PASSWORD }}"
-        }'     
+        aws secretsmanager describe-secret --region "$AWS_REGION" --secret-id "$SECRET_NAME" > /dev/null 2>&1 \
+          && aws secretsmanager put-secret-value --region "$AWS_REGION" --secret-id "$SECRET_NAME" --secret-string "$SECRET_VALUE" \
+          || aws secretsmanager create-secret --region "$AWS_REGION" --name "$SECRET_NAME" --secret-string "$SECRET_VALUE"
 
-    # 7️⃣ Initialize Terraform
+    # 8️⃣ Initialize Terraform
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
