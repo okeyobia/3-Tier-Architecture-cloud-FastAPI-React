@@ -3,7 +3,7 @@ resource "aws_lb" "alb" {
 }
 
 resource "aws_lb_target_group" "tg" {
-  port = 80
+  port = 8000
   protocol = "HTTP"
   vpc_id = var.vpc_id
 }
@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "task" {
   container_definitions = jsonencode([{
     name  = "fastapi"
     image = var.backend_image
-    portMappings = [{ containerPort = 80 }]
+    portMappings = [{ containerPort = 8000 }]
     memory = 512
     secrets = [
       {
