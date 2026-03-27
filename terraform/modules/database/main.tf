@@ -23,4 +23,5 @@ resource "aws_db_instance" "db" {
   password       = local.db_creds.password
   multi_az       = true
   db_subnet_group_name = aws_db_subnet_group.rds.name
+  skip_final_snapshot = true
 }
