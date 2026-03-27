@@ -19,6 +19,14 @@ resource "aws_ecs_task_definition" "task" {
     name  = "fastapi"
     image = var.backend_image
     portMappings = [{ containerPort = 80 }]
+
+    secrets = [
+      {
+        name      = "DB_SECRET_ARN"
+        valueFrom = var.db_secret_arn
+      }
+
+    ]
   }])
 }
 

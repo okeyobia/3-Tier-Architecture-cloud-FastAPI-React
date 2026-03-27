@@ -1,13 +1,13 @@
 resource "aws_secretsmanager_secret" "db" {
-  name = "${var.app_name}-db-secret"
+  name = "${var.app_name}-db"
 }
 
 resource "aws_secretsmanager_secret_version" "db" {
   secret_id = aws_secretsmanager_secret.db.id
-  secret_string = jsonencode({
-    username = var.db_user
-    password = var.db_password
-  })
+}
+
+locals {
+  db_creds = jsondecode(data.aws_secretsmanager_secret_version.db.secret_string)
 }
 
 resource "aws_db_subnet_group" "rds" {
@@ -17,8 +17,8 @@ resource "aws_db_subnet_group" "rds" {
 resource "aws_db_instance" "db" {
   engine         = "postgres"
   instance_class = "db.t3.micro"
-  username       = var.db_user
-  password       = var.db_password
+  username       = local.db_creds.username
+  password       = local.db_creds.password
   multi_az       = true
   db_subnet_group_name = aws_db_subnet_group.rds.name
 }

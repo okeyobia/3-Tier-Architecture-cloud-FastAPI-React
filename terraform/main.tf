@@ -7,8 +7,6 @@ module "database" {
   source          = "./modules/database"
   app_name        = var.app_name
   db_name         = var.db_name
-  db_user         = var.db_user
-  db_password     = var.db_password
   private_subnets = module.networking.private_subnets
   vpc_id          = module.networking.vpc_id
 }
