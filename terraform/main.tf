@@ -22,7 +22,7 @@ module "backend" {
   db_host         = module.database.db_endpoint
 }
 
-module "frontend" {
-  source              = "./modules/frontend"
-  app_name            = var.app_name
-}
+## module "frontend" {
+##   source   = "./modules/frontend"
+##   app_name = var.app_name
+## }
