@@ -12,14 +12,15 @@ module "database" {
 }
 
 module "backend" {
-  source          = "./modules/backend"
-  app_name        = var.app_name
-  vpc_id          = module.networking.vpc_id
-  private_subnets = module.networking.private_subnets
-  public_subnets  = module.networking.public_subnets
-  backend_image   = var.backend_image
-  db_secret_arn   = module.database.secret_arn
-  db_host         = module.database.db_endpoint
+  source            = "./modules/backend"
+  app_name          = var.app_name
+  vpc_id            = module.networking.vpc_id
+  private_subnets   = module.networking.private_subnets
+  public_subnets    = module.networking.public_subnets
+  backend_image     = var.backend_image
+  db_secret_arn     = module.database.secret_arn
+  db_host           = module.database.db_endpoint
+  ec2_instance_type = var.ec2_instance_type
 }
 
 ## module "frontend" {

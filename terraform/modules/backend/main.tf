@@ -46,4 +46,5 @@ resource "aws_ecs_service" "svc" {
   cluster         = aws_ecs_cluster.main.id
   task_definition = aws_ecs_task_definition.task.arn
   desired_count   = 2
+  launch_type     = "EC2"
 }

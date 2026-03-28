@@ -9,3 +9,8 @@ variable "backend_image" {}
 variable "frontend_image" {}
 
 variable "db_name" {}
+
+variable "ec2_instance_type" {
+    description = "EC2 instance type for ECS cluster nodes"
+    default     = "t3.micro"
+}
